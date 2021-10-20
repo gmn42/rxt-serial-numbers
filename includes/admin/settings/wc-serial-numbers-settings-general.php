@@ -46,6 +46,12 @@ if ( ! class_exists( 'WC_Serial_Numbers_Settings_General' ) ) :
 					'type'  => 'checkbox',
 				],
 				[
+					'title' => __( 'Disable Encryption', 'wc-serial-numbers' ),
+					'id'    => 'wc_serial_numbers_disable_encryption',
+					'desc'  => __( 'This will disable database encrytption of serial number.', 'wc-serial-numbers' ),
+					'type'  => 'checkbox',
+				],
+				[
 					'title'           => __( 'Revoke statuses', 'wc-serial-numbers' ),
 					'desc'            => __( 'Cancelled', 'wc-serial-numbers' ),
 					'id'              => 'wc_serial_numbers_revoke_status_cancelled',

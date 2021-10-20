@@ -79,6 +79,18 @@ function wc_serial_numbers_reuse_serial_numbers() {
 }
 
 /**
+ * Check if encryption is disabled (i.e, for real physical product serial numbers)
+ *
+ * @param $product_id
+ *
+ * @return bool
+ * @since 1.x.x
+ */
+function wc_serial_numbers_encryption_disabled() {
+	return 'yes' == get_option( 'wc_serial_numbers_disable_encryption' );
+}
+
+/**
  * Encrypt serial number.
  *
  * @param $key
@@ -364,8 +376,8 @@ function wc_serial_numbers_insert_serial_number( $args ) {
 		return new \WP_Error( 'invalid_status', __( 'Sold item must have a associated valid order.', 'wc-serial-numbers' ) );
 	}
 
-	if ( $order && $status == 'sold' ) {
-		$items = $order->get_items();
+	if ( $order ) {
+	$items = $order->get_items();
 		//error_log( print_r( $items, true ) );
 		$valid_product = false;
 		foreach ( $items as $item_id => $item ) {
@@ -484,6 +496,20 @@ function wc_serial_numbers_delete_serial_number( $id ) {
  */
 function wc_serial_numbers_get_serial_number( $id ) {
 	return WC_Serial_Numbers_Query::init()->table( 'serial_numbers' )->find( intval( $id ) );
+}
+
+/**
+ * @param $key
+ *
+ * @return mixed
+ * @since 1.x.x
+ */
+function wc_serial_numbers_get_serial_number_by_key( $key, $single = false) {
+	$query = WC_Serial_Numbers_Query::init()
+	->from( 'serial_numbers' )
+	->where( 'serial_key', '=',  apply_filters( 'wc_serial_numbers_maybe_encrypt', $key ));
+
+	return $single ? $query->one() : $query->get();
 }
 
 /**

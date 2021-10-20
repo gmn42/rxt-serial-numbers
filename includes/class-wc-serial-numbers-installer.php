@@ -94,6 +94,7 @@ class WC_Serial_Numbers_Installer {
 		$settings = array(
 			'wc_serial_numbers_autocomplete_order'        => 'yes',
 			'wc_serial_numbers_reuse_serial_number'       => 'no',
+			'wc_serial_numbers_disable_encryption'        => 'no',
 			'wc_serial_numbers_disable_software_support'  => 'no',
 			'wc_serial_numbers_enable_stock_notification' => 'yes',
 			'wc_serial_numbers_hide_serial_number'        => 'yes',

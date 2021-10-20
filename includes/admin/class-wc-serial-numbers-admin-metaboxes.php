@@ -251,11 +251,11 @@ class WC_Serial_Numbers_Admin_MetaBoxes {
 			return false;
 		}
 
-		if ( 'completed' !== $order->get_status( 'edit' ) ) {
-			echo sprintf( '<p>%s</p>', __( 'Order status is not completed.', 'wc-serial-numbers' ) );
+		// if ( 'completed' !== $order->get_status( 'edit' ) ) {
+		// 	echo sprintf( '<p>%s</p>', __( 'Order status is not completed.', 'wc-serial-numbers' ) );
 
-			return false;
-		}
+		// 	return false;
+		// }
 
 		$total_ordered_serial_numbers = wc_serial_numbers_order_has_serial_numbers( $order );
 		if ( empty( $total_ordered_serial_numbers ) ) {
