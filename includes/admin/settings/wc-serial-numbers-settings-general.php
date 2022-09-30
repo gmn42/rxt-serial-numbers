@@ -48,7 +48,7 @@ if ( ! class_exists( 'WC_Serial_Numbers_Settings_General' ) ) :
 				[
 					'title' => __( 'Disable Encryption', 'wc-serial-numbers' ),
 					'id'    => 'wc_serial_numbers_disable_encryption',
-					'desc'  => __( 'This will disable database encrytption of serial number.', 'wc-serial-numbers' ),
+					'desc'  => __( 'This will disable database encryption of serial numbers.', 'wc-serial-numbers' ),
 					'type'  => 'checkbox',
 				],
 				[
