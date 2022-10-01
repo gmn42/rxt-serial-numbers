@@ -45,6 +45,9 @@ class WC_Serial_Numbers_Handler {
 			$quantity        = $cart_product['quantity'];
 			$allow_backorder = apply_filters( 'wc_serial_numbers_allow_backorder', false, $product_id );
 
+			// bypass checks if a serial number is included in cart meta
+			if ( isset( $cart_product['rxt_location'])) continue;
+
 			if ( wc_serial_numbers_product_serial_enabled( $product_id ) && ! $allow_backorder ) {
 				$per_item_quantity = absint( apply_filters( 'wc_serial_numbers_per_product_delivery_qty', 1, $product_id ) );
 				$needed_quantity   = $quantity * ( empty( $per_item_quantity ) ? 1 : absint( $per_item_quantity ) );
