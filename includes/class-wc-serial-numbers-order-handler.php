@@ -45,7 +45,7 @@ class WC_Serial_Numbers_Handler {
 			$quantity        = $cart_product['quantity'];
 			$allow_backorder = apply_filters( 'wc_serial_numbers_allow_backorder', false, $product_id );
 
-			// bypass checks if a serial number is included in cart meta
+			// bypass stock checks if a specific serial number is included in cart meta
 			if ( isset( $cart_product['rxt_location'])) continue;
 
 			if ( wc_serial_numbers_product_serial_enabled( $product_id ) && ! $allow_backorder ) {
