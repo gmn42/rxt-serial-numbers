@@ -467,7 +467,7 @@ abstract class Model {
 		 */
 		do_action( $this->get_hook_prefix() . '_pre_update', $this, $changes );
 
-		$data = wp_array_slice_assoc( $changes, $this->get_core_data_keys() );
+		$data = array_intersect_key( $changes, array_flip($this->get_core_data_keys() ));
 
 		/**
 		 * Filters the data to be updated in the database.
