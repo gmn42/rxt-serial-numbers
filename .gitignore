@@ -49,7 +49,7 @@ codeception.yml
 .env.testing
 
 # Framework
-lib
+#lib
 !lib/classes/wp-async-request.php
 !lib/classes/wp-background-process.php
 
