@@ -467,7 +467,7 @@ abstract class Model {
 		 */
 		do_action( $this->get_hook_prefix() . '_pre_update', $this, $changes );
 
-		$data = array_intersect_key( $changes, array_flip($this->get_core_data_keys() ));
+		$data = $this->array_slice_assoc( $changes, $this->get_core_data_keys() );
 
 		/**
 		 * Filters the data to be updated in the database.
@@ -501,6 +501,10 @@ abstract class Model {
 		do_action( $this->get_hook_prefix() . '_updated', $this, $changes );
 
 		return true;
+	}
+
+	function array_slice_assoc($array,$keys) {
+		return array_intersect_key($array,array_flip($keys));
 	}
 
 	/**
