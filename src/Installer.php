@@ -383,9 +383,9 @@ class Installer {
 
 		// if uuid column not exist then add it.
 		if ( ! $wpdb->get_var( "SHOW COLUMNS FROM {$prefix}serial_numbers LIKE 'uuid'" ) ) {
-			$wpdb->query( "ALTER TABLE {$prefix}serial_numbers ADD uuid varchar(50) DEFAULT NULL AFTER order_item_id" );
+			$wpdb->query( "ALTER TABLE {$prefix}serial_numbers ADD uuid varchar(50) DEFAULT (UUID()) AFTER order_item_id" );
 			$wpdb->query( "ALTER TABLE {$prefix}serial_numbers ADD UNIQUE KEY  uuid (uuid)" );
-			$wpdb->query( "UPDATE {$prefix}serial_numbers SET uuid = UUID()" );
+			$wpdb->query( "UPDATE {$prefix}serial_numbers SET uuid = UUID() WHERE uuid IS NULL" );
 		}
 
 	}
