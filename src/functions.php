@@ -916,6 +916,8 @@ function wcsn_get_stocks_count( $stock_limit = null, $force = true ) {
 			] );
 		}
 
+		$counts = apply_filters( 'wc_serial_numbers_products_stock_count', $counts);
+
 		set_transient( $transient_key, $counts, 60 * 60 );
 	}
 	if ( $stock_limit > 0 ) {
