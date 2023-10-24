@@ -82,7 +82,7 @@ function WCSN() { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.
 		'support_url'      => 'https://pluginever.com/support/',
 		'docs_url'         => 'https://pluginever.com/docs/wocommerce-serial-numbers/',
 		'premium_url'      => 'https://pluginever.com/plugins/woocommerce-serial-numbers-pro/',
-		'premium_basename' => 'wc-serial-numbers-pro',
+		'premium_basename' => 'rxt-serial-numbers-pro',
 		'review_url'       => 'https://wordpress.org/support/plugin/wc-serial-numbers/reviews/?filter=5#new-post',
 	);
 
