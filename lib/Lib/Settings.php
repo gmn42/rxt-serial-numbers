@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) || exit;
  * Class Settings
  *
  * @since 1.0.0
- * @version 1.0.2
+ * @version 1.0.4
  * @subpackage WooCommerceSerialNumbers\Lib\Settings
  * @package WooCommerceSerialNumbers\Lib
  */
@@ -16,10 +16,10 @@ abstract class Settings {
 	/**
 	 * Init settings.
 	 *
-	 * @since 1.0.0
+	 * @since 1.0.3
 	 * @return self
 	 */
-	public static function get_instance() {
+	public static function instance() {
 		static $instance = null;
 		$class_name      = get_called_class();
 		if ( null === $instance ) {
@@ -27,6 +27,18 @@ abstract class Settings {
 		}
 
 		return $instance;
+	}
+
+	/**
+	 * Init settings.
+	 *
+	 * @since 1.0.0
+	 * @depecated 1.0.3
+	 * @return self
+	 */
+	public static function get_instance() {
+		_doing_it_wrong( __FUNCTION__, 'Use static::instance() instead.', '1.0.3' );
+		return static::instance();
 	}
 
 	/**
@@ -81,7 +93,7 @@ abstract class Settings {
 		$current_tab = $this->get_current_tab();
 		$settings    = $this->get_settings( $current_tab );
 		if ( class_exists( '\WC_Admin_Settings' ) && ! empty( $settings ) && \WC_Admin_Settings::save_fields( $settings ) ) {
-			add_settings_error( $class_name, 'response', __( 'Settings saved.', 'wc-serial-numbers' ), 'updated' );
+			add_settings_error( $class_name, 'response', __( 'Settings saved.', 'framework-text-domain' ), 'updated' );
 
 			return true;
 		}
@@ -147,13 +159,63 @@ abstract class Settings {
 						}
 
 						if (show) {
-							$this.closest('tr').style.display = 'block';
+							$this.closest('tr').style.display = 'table-row';
 						} else {
 							$this.closest('tr').style.display = 'none';
 						}
 					});
 
 					$conditional_field.dispatchEvent(new Event('change'));
+				});
+
+				// if Jquery is not loaded, return.
+				if (typeof jQuery === 'undefined') {
+					return;
+				}
+
+				// trigger change event on load.
+				jQuery(document).ready(function ($) {
+					// check if iris is loaded.
+					if (typeof $.fn.iris !== 'undefined') {
+						// Color picker.
+						$('.colorpick')
+							.iris({
+								change: function (event, ui) {
+									$(this)
+										.parent()
+										.find('.colorpickpreview')
+										.css({backgroundColor: ui.color.toString()});
+								},
+								hide: true,
+								border: true,
+							})
+							.on('click focus', function (event) {
+								event.stopPropagation();
+								$('.iris-picker').hide();
+								$(this).closest('td').find('.iris-picker').show();
+								$(this).data('originalValue', $(this).val());
+							})
+							.on('change', function () {
+								if ($(this).is('.iris-error')) {
+									var original_value = $(this).data('originalValue');
+									if (
+										original_value.match(
+											/^\#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/
+										)
+									) {
+										$(this)
+											.val($(this).data('originalValue'))
+											.trigger('change');
+									} else {
+										$(this).val('').trigger('change');
+									}
+								}
+							});
+
+						$('body').on('click', function () {
+							$('.iris-picker').hide();
+						});
+					}
 				});
 			});
 		</script>
@@ -245,8 +307,8 @@ abstract class Settings {
 						'description' => '',
 						'basename'    => '',
 						'slug'        => '',
-						'badge'       => esc_html__( 'Recommended', 'wc-serial-numbers' ),
-						'button'      => esc_html__( 'Install Now', 'wc-serial-numbers' ),
+						'badge'       => esc_html__( 'Recommended', 'framework-text-domain' ),
+						'button'      => esc_html__( 'Install Now', 'framework-text-domain' ),
 						'installed'   => false,
 					)
 				);
@@ -279,9 +341,7 @@ abstract class Settings {
 						<span class="pev-panel__legend"><?php echo esc_html( $promo_plugin['badge'] ); ?></span>
 					<?php endif; ?>
 					<div class="pev-panel__group">
-						<?php if ( ! empty( $promo_plugin['thumbnail'] ) ) : ?>
-							<img src="<?php echo esc_url( $promo_plugin['thumbnail'] ); ?>" alt="<?php echo esc_attr( $promo_plugin['name'] ); ?>">
-						<?php endif; ?>
+						<span class="icon dashicons dashicons-admin-plugins"></span>
 						<h3>
 							<?php echo esc_html( $promo_plugin['name'] ); ?>
 						</h3>
@@ -307,7 +367,7 @@ abstract class Settings {
 		if ( ! empty( $support_links ) ) {
 			?>
 			<div class="pev-panel">
-				<h3><?php esc_html_e( 'Need Help?', 'wc-serial-numbers' ); ?></h3>
+				<h3><?php esc_html_e( 'Need Help?', 'framework-text-domain' ); ?></h3>
 				<ul>
 					<?php foreach ( $support_links as $support_link ) : ?>
 						<li>
@@ -331,31 +391,28 @@ abstract class Settings {
 	public function get_promo_plugins() {
 		return array(
 			array(
-				'name'        => 'Min Max Quantity for WooCommerce',
+				'name'        => 'WC Min Max Quantities',
 				'slug'        => 'wc-min-max-quantities',
 				'description' => 'Set minimum and maximum price or quantity for WooCommerce products.',
-				'thumbnail'   => 'https://ps.w.org/wc-min-max-quantities/assets/icon-256x256.png?rev=2775545',
 				'link'        => 'https://wordpress.org/plugins/wc-min-max-quantities/',
-				'badge'       => esc_html__( 'Recommended', 'wc-serial-numbers' ),
-				'button'      => esc_html__( 'Install Now', 'wc-serial-numbers' ),
+				'badge'       => esc_html__( 'Recommended', 'framework-text-domain' ),
+				'button'      => esc_html__( 'Install Now', 'framework-text-domain' ),
 			),
 			array(
 				'name'        => 'Product Category Showcase for WooCommerce',
 				'slug'        => 'wc-category-showcase',
 				'description' => 'Display WooCommerce categories in a beautiful way.',
-				'thumbnail'   => 'https://ps.w.org/wc-category-showcase/assets/icon-256x256.png?rev=2775545',
 				'link'        => 'https://wordpress.org/plugins/wc-category-showcase/',
-				'badge'       => esc_html__( 'Recommended', 'wc-serial-numbers' ),
-				'button'      => esc_html__( 'Install Now', 'wc-serial-numbers' ),
+				'badge'       => esc_html__( 'Recommended', 'framework-text-domain' ),
+				'button'      => esc_html__( 'Install Now', 'framework-text-domain' ),
 			),
 			array(
 				'name'        => 'Product Category Slider for WooCommerce',
 				'basename'    => 'woo-category-slider-by-pluginever/woo-category-slider.php',
 				'description' => 'Display WooCommerce categories in a beautiful way.',
-				'thumbnail'   => 'https://ps.w.org/woo-category-slider-by-pluginever/assets/icon-256x256.png?rev=2775545',
 				'link'        => 'https://wordpress.org/plugins/woo-category-slider-by-pluginever/',
-				'badge'       => esc_html__( 'Recommended', 'wc-serial-numbers' ),
-				'button'      => esc_html__( 'Install Now', 'wc-serial-numbers' ),
+				'badge'       => esc_html__( 'Recommended', 'framework-text-domain' ),
+				'button'      => esc_html__( 'Install Now', 'framework-text-domain' ),
 			),
 		);
 	}
@@ -369,15 +426,15 @@ abstract class Settings {
 	public function get_support_links() {
 		return array(
 			'facebook'        => array(
-				'label' => __( 'Join our Community', 'wc-serial-numbers' ),
+				'label' => __( 'Join our Community', 'framework-text-domain' ),
 				'url'   => 'https://www.facebook.com/groups/pluginever',
 			),
 			'feature-request' => array(
-				'label' => __( 'Request a Feature', 'wc-serial-numbers' ),
+				'label' => __( 'Request a Feature', 'framework-text-domain' ),
 				'url'   => 'https://www.pluginever.com/contact/',
 			),
 			'bug-report'      => array(
-				'label' => __( 'Report a Bug', 'wc-serial-numbers' ),
+				'label' => __( 'Report a Bug', 'framework-text-domain' ),
 				'url'   => 'https://www.pluginever.com/contact/',
 			),
 		);
@@ -390,7 +447,7 @@ abstract class Settings {
 	 * @return string
 	 */
 	public function get_current_page() {
-		$page = filter_input( INPUT_GET, 'page' );
+		$page = filter_input( INPUT_GET, 'page', FILTER_SANITIZE_SPECIAL_CHARS );
 		return ! empty( $page ) ? sanitize_text_field( wp_unslash( $page ) ) : '';
 	}
 
@@ -402,7 +459,7 @@ abstract class Settings {
 	 */
 	protected function get_current_tab() {
 		$tabs = $this->get_tabs();
-		$tab  = filter_input( INPUT_GET, 'tab' );
+		$tab  = filter_input( INPUT_GET, 'tab', FILTER_SANITIZE_SPECIAL_CHARS );
 		$tab  = ! empty( $tab ) ? sanitize_text_field( wp_unslash( $tab ) ) : '';
 
 		if ( ! array_key_exists( $tab, $tabs ) ) {
@@ -439,6 +496,6 @@ abstract class Settings {
 	 * @return void
 	 */
 	public static function output() {
-		self::get_instance()->output_settings();
+		self::instance()->output_settings();
 	}
 }

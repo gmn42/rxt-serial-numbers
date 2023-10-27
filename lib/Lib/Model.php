@@ -6,7 +6,7 @@
  * the different data object classes.
  *
  * @since 1.0.0
- * @version 1.0.7
+ * @version 1.0.8
  * @package Framework
  */
 
@@ -421,7 +421,7 @@ abstract class Model {
 		$data = apply_filters( $this->get_hook_prefix() . '_insert_data', $data, $this );
 		if ( false === $wpdb->insert( $wpdb->{$this->table_name}, $data ) ) {
 			// translators: %s: database error message.
-			return new \WP_Error( 'db_insert_error', sprintf( __( 'Could not insert item into the database error %s', 'wc-serial-numbers' ), $wpdb->last_error ) );
+			return new \WP_Error( 'db_insert_error', sprintf( __( 'Could not insert item into the database error %s', 'framework-text-domain' ), $wpdb->last_error ) );
 		}
 
 		$this->set_prop( $this->primary_key, $wpdb->insert_id );
@@ -467,7 +467,7 @@ abstract class Model {
 		 */
 		do_action( $this->get_hook_prefix() . '_pre_update', $this, $changes );
 
-		$data = $this->array_slice_assoc( $changes, $this->get_core_data_keys() );
+		$data = wp_array_slice_assoc( $changes, $this->get_core_data_keys() );
 
 		/**
 		 * Filters the data to be updated in the database.
@@ -485,8 +485,8 @@ abstract class Model {
 					$data[ $key ] = maybe_serialize( $value );
 				}
 			}
-			if ( false === $wpdb->update( $wpdb->{$this->table_name}, $data, [ $this->primary_key => $this->get_prop( $this->primary_key ) ] ) ) {
-				return new \WP_Error( 'db_update_error', __( 'Could not update item in the database.', 'wc-serial-numbers' ), $wpdb->last_error );
+			if ( false === $wpdb->update( $wpdb->{$this->table_name}, $data, array( $this->primary_key => $this->get_prop( $this->primary_key ) ) ) ) {
+				return new \WP_Error( 'db_update_error', __( 'Could not update item in the database.', 'framework-text-domain' ), $wpdb->last_error );
 			}
 		}
 
@@ -501,10 +501,6 @@ abstract class Model {
 		do_action( $this->get_hook_prefix() . '_updated', $this, $changes );
 
 		return true;
-	}
-
-	function array_slice_assoc($array,$keys) {
-		return array_intersect_key($array,array_flip($keys));
 	}
 
 	/**
@@ -934,10 +930,10 @@ abstract class Model {
 			 */
 			$items = apply_filters( $this->get_hook_prefix() . '_query_items', $items, $args );
 
-			$result = (object) [
+			$result = (object) array(
 				'items' => $items,
 				'total' => $total,
-			];
+			);
 
 			wp_cache_add( $cache_key, $result, $this->cache_group );
 		}
@@ -1219,125 +1215,125 @@ abstract class Model {
 		foreach ( $this->get_core_data_keys() as $column ) {
 			// equals clause.
 			if ( ! empty( $args[ $column ] ) ) {
-				$query_where[] = [
+				$query_where[] = array(
 					'column'  => "{$this->table_name}.{$column}",
 					'value'   => $args[ $column ],
 					'compare' => false !== strpos( $column, '_ids' ) ? 'FIND_IN_SET' : '=', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
-				];
+				);
 			} elseif ( ! empty( $args[ $column . '__in' ] ) ) {
-				$query_where[] = [
+				$query_where[] = array(
 					'column'  => "{$this->table_name}.{$column}",
 					'value'   => $args[ $column . '__in' ],
 					'compare' => false !== strpos( $column, '_ids' ) ? 'FIND_IN_SET' : 'IN', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
-				];
+				);
 			} elseif ( ! empty( $args[ $column . '__not_in' ] ) ) {
 				// __not_in clause.
-				$query_where[] = [
+				$query_where[] = array(
 					'column'  => "{$this->table_name}.{$column}",
 					'value'   => $args[ $column . '__not_in' ],
 					'compare' => false !== strpos( $column, '_ids' ) ? 'NOT_IN_SET' : 'NOT IN', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
-				];
+				);
 			} elseif ( ! empty( $args[ $column . '__between' ] ) ) {
 				// __between clause.
-				$query_where[] = [
+				$query_where[] = array(
 					'column'  => "{$this->table_name}.{$column}",
 					'value'   => $args[ $column . '__between' ],
 					'compare' => 'BETWEEN',
-				];
+				);
 			} elseif ( ! empty( $args[ $column . '__not_between' ] ) ) {
 				// __not_between clause.
-				$query_where[] = [
+				$query_where[] = array(
 					'column'  => "{$this->table_name}.{$column}",
 					'value'   => $args[ $column . '__not_between' ],
 					'compare' => 'NOT BETWEEN',
-				];
+				);
 			} elseif ( ! empty( $args[ $column . '__exists' ] ) ) {
 				// __exists clause.
-				$query_where[] = [
+				$query_where[] = array(
 					'column'  => "{$this->table_name}.{$column}",
 					'compare' => 'EXISTS',
-				];
+				);
 			} elseif ( ! empty( $args[ $column . '__not_exists' ] ) ) {
 				// __not_exists clause.
-				$query_where[] = [
+				$query_where[] = array(
 					'column'  => "{$this->table_name}.{$column}",
 					'compare' => 'NOT EXISTS',
-				];
+				);
 			} elseif ( ! empty( $args[ $column . '__like' ] ) ) {
 				// __like clause.
-				$query_where[] = [
+				$query_where[] = array(
 					'column'  => "{$this->table_name}.{$column}",
 					'value'   => $args[ $column . '__like' ],
 					'compare' => 'LIKE',
-				];
+				);
 			} elseif ( ! empty( $args[ $column . '__not_like' ] ) ) {
 				// __not_like clause.
-				$query_where[] = [
+				$query_where[] = array(
 					'column'  => "{$this->table_name}.{$column}",
 					'value'   => $args[ $column . '__not_like' ],
 					'compare' => 'NOT LIKE',
-				];
+				);
 			} elseif ( ! empty( $args[ $column . '__starts_with' ] ) ) {
 				// __starts_with clause.
-				$query_where[] = [
+				$query_where[] = array(
 					'column'  => "{$this->table_name}.{$column}",
 					'value'   => $args[ $column . '__starts_with' ],
 					'compare' => 'LIKE',
-				];
+				);
 			} elseif ( ! empty( $args[ $column . '__ends_with' ] ) ) {
 				// __ends_with clause.
-				$query_where[] = [
+				$query_where[] = array(
 					'column'  => "{$this->table_name}.{$column}",
 					'value'   => $args[ $column . '__ends_with' ],
 					'compare' => 'ENDS WITH',
-				];
+				);
 			} elseif ( ! empty( $args[ $column . '__is_null' ] ) ) {
 				// __is_null clause.
-				$query_where[] = [
+				$query_where[] = array(
 					'column'  => "{$this->table_name}.{$column}",
 					'compare' => 'IS NULL',
-				];
+				);
 			} elseif ( ! empty( $args[ $column . '__is_not_null' ] ) ) {
 				// __is_not_null clause.
-				$query_where[] = [
+				$query_where[] = array(
 					'column'  => "{$this->table_name}.{$column}",
 					'compare' => 'IS NOT NULL',
-				];
+				);
 			} elseif ( ! empty( $args[ $column . '__gt' ] ) ) {
 				// __gt clause.
-				$query_where[] = [
+				$query_where[] = array(
 					'column'  => "{$this->table_name}.{$column}",
 					'value'   => $args[ $column . '__gt' ],
 					'compare' => 'GREATER THAN',
-				];
+				);
 			} elseif ( ! empty( $args[ $column . '__lt' ] ) ) {
 				// __lt clause.
-				$query_where[] = [
+				$query_where[] = array(
 					'column'  => "{$this->table_name}.{$column}",
 					'value'   => $args[ $column . '__lt' ],
 					'compare' => 'LESS THAN',
-				];
+				);
 			} elseif ( ! empty( $args[ $column . '__find_in_set' ] ) ) {
 				// find_in_set clause.
-				$query_where[] = [
+				$query_where[] = array(
 					'column'  => "{$this->table_name}.{$column}",
 					'compare' => 'FIND_IN_SET',
 					'value'   => $args[ $column . '__find_in_set' ],
-				];
+				);
 			} elseif ( ! empty( $args[ $column . '__find_not_in_set' ] ) ) {
 				// find_in_set clause.
-				$query_where[] = [
+				$query_where[] = array(
 					'column'  => "{$this->table_name}.{$column}",
 					'compare' => 'NOT_IN_SET',
 					'value'   => $args[ $column . '__find_not_in_set' ],
-				];
+				);
 			} elseif ( ! empty( $args[ $column . '__regexp' ] ) ) {
 				// __regexp clause.
-				$query_where[] = [
+				$query_where[] = array(
 					'column'  => "{$this->table_name}.{$column}",
 					'value'   => $args[ $column . '__regexp' ],
 					'compare' => 'REGEXP',
-				];
+				);
 			}
 		}
 
@@ -1582,7 +1578,7 @@ abstract class Model {
 			// Restore the original columns.
 			add_filter(
 				'date_query_valid_columns',
-				function ( $cols ) use ( $wp_columns ) {
+				function () use ( $wp_columns ) {
 					return $wp_columns;
 				}
 			);
@@ -1771,7 +1767,6 @@ abstract class Model {
 		 * @since 1.0.0
 		 */
 		return apply_filters( $this->get_hook_prefix() . '_setup_having_query', $clauses, $args, $this );
-
 	}
 
 	/**

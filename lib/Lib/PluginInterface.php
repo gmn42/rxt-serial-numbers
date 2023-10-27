@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) || exit;
  * Describes a plugin instance.
  *
  * @since 1.0.0
- * @version 1.0.2
+ * @version 1.0.8
  * @author  Sultan Nasir Uddin <sultan@byteever.com>
  * @package WooCommerceSerialNumbers\Lib
  * @subpackage Lib/Plugin
@@ -259,7 +259,7 @@ interface PluginInterface {
 	 * @since 1.0.0
 	 * @return void
 	 */
-	public function register_script( $handle, $src, $deps = [], $in_footer = false );
+	public function register_script( $handle, $src, $deps = array(), $in_footer = false );
 
 	/**
 	 * Enqueue styles helper.
@@ -272,7 +272,7 @@ interface PluginInterface {
 	 * @since 1.0.0
 	 * @return void
 	 */
-	public function register_style( $handle, $src, $deps = [], $media = 'all' );
+	public function register_style( $handle, $src, $deps = array(), $media = 'all' );
 
 	/**
 	 * Enqueue scripts helper.
@@ -285,7 +285,7 @@ interface PluginInterface {
 	 * @since 1.0.0
 	 * @return void
 	 */
-	public function enqueue_script( $handle, $src, $deps = [], $in_footer = false );
+	public function enqueue_script( $handle, $src, $deps = array(), $in_footer = false );
 
 	/**
 	 * Enqueue styles helper.
@@ -298,7 +298,7 @@ interface PluginInterface {
 	 * @since 1.0.0
 	 * @return void
 	 */
-	public function enqueue_style( $handle, $src, $deps = [], $media = 'all' );
+	public function enqueue_style( $handle, $src, $deps = array(), $media = 'all' );
 
 	/**
 	 * Check if the plugin is active.

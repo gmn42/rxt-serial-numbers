@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) || exit;
  * Template for encapsulating some of the most often required abilities of a plugin instance.
  *
  * @since   1.0.0
- * @version 1.0.5
+ * @version 1.0.8
  * @author  Sultan Nasir Uddin <sultan@byteever.com>
  * @package WooCommerceSerialNumbers\Lib
  * @subpackage Lib/Plugin
@@ -30,9 +30,9 @@ abstract class Plugin implements PluginInterface {
 	 * The plugin services.
 	 *
 	 * @since 1.0.0
-	 * @var array
+	 * @var Container
 	 */
-	public $services = array();
+	public $services;
 
 	/**
 	 * The single instance of the class.
@@ -74,10 +74,23 @@ abstract class Plugin implements PluginInterface {
 	 * Gets the instance of the class.
 	 *
 	 * @since 1.0.0
+	 * @depecated 1.0.5
 	 *
 	 * @return static
 	 */
 	final public static function get_instance() {
+		_doing_it_wrong( __FUNCTION__, 'Use static::create() instead.', '1.0.5' );
+		return static::instance();
+	}
+
+	/**
+	 * Gets the instance of the class.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return static
+	 */
+	final public static function instance() {
 		if ( null === static::$instance ) {
 			_doing_it_wrong( __FUNCTION__, 'Plugin instance called before initiating the instance.', '1.0.0' );
 		}
@@ -93,6 +106,7 @@ abstract class Plugin implements PluginInterface {
 	 * @since 1.0.0
 	 */
 	protected function __construct( $data ) {
+		$this->services = new Container();
 		// Only set the data keys that are not already set.
 		$this->data = array_merge( $this->data, $data );
 		// If the slug is not set, then set it.
@@ -110,6 +124,7 @@ abstract class Plugin implements PluginInterface {
 
 		// Register hooks.
 		add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
+
 		if ( is_admin() ) {
 			add_filter( 'wp_redirect', array( $this, 'save_notices' ), 1 );
 			add_action( 'init', array( $this, 'load_notices' ), 1 );
@@ -272,7 +287,7 @@ abstract class Plugin implements PluginInterface {
 	 * @return array
 	 */
 	public function plugin_action_links( $links ) {
-		$actions = [];
+		$actions = array();
 		foreach ( $this->get_action_links() as $key => $link ) {
 			$actions[ $key ] = sprintf( '<a href="%1$s">%2$s</a>', esc_url( $link['url'] ), wp_kses_post( $link['label'] ) );
 		}
@@ -291,7 +306,7 @@ abstract class Plugin implements PluginInterface {
 				),
 				$this->get_premium_url()
 			);
-			$links['go_pro'] = sprintf( '<a href="%1$s" target="_blank" style="color: #39b54a; font-weight: bold;">%2$s</a>', esc_url( $pro_link ), esc_html__( 'Go Pro', 'wc-serial-numbers' ) );
+			$links['go_pro'] = sprintf( '<a href="%1$s" target="_blank" style="color: #39b54a; font-weight: bold;">%2$s</a>', esc_url( $pro_link ), esc_html__( 'Go Pro', 'framework-text-domain' ) );
 		}
 
 		return $links;
@@ -634,30 +649,30 @@ abstract class Plugin implements PluginInterface {
 	 * @return array
 	 */
 	public function get_meta_links() {
-		$links = [];
+		$links = array();
 		if ( ! empty( $this->get_docs_url() ) ) {
 			$links['docs'] = array(
-				'label' => __( 'Documentation', 'wc-serial-numbers' ),
+				'label' => __( 'Documentation', 'framework-text-domain' ),
 				'url'   => $this->get_docs_url(),
 			);
 		}
 
 		if ( ! empty( $this->get_support_url() ) ) {
 			$links['support'] = array(
-				'label' => __( 'Support', 'wc-serial-numbers' ),
+				'label' => __( 'Support', 'framework-text-domain' ),
 				'url'   => $this->get_support_url(),
 			);
 		}
 
 		if ( ! empty( $this->get_review_url() ) ) {
 			$links['review'] = array(
-				'label' => __( 'Review', 'wc-serial-numbers' ),
+				'label' => __( 'Review', 'framework-text-domain' ),
 				'url'   => $this->get_review_url(),
 			);
 		}
 
 		$links['plugins'] = array(
-			'label' => __( 'More Plugins', 'wc-serial-numbers' ),
+			'label' => __( 'More Plugins', 'framework-text-domain' ),
 			'url'   => $this->get_store_url(),
 		);
 
@@ -671,10 +686,10 @@ abstract class Plugin implements PluginInterface {
 	 * @return array
 	 */
 	public function get_action_links() {
-		$links = [];
+		$links = array();
 		if ( ! empty( $this->get_settings_url() ) ) {
 			$links['settings'] = array(
-				'label' => __( 'Settings', 'wc-serial-numbers' ),
+				'label' => __( 'Settings', 'framework-text-domain' ),
 				'url'   => $this->get_settings_url(),
 			);
 		}
@@ -690,6 +705,21 @@ abstract class Plugin implements PluginInterface {
 	| This section is for helper methods.
 	|
 	*/
+
+	/**
+	 * Define constant if not already set.
+	 *
+	 * @param string      $name  Constant name.
+	 * @param string|bool $value Constant value.
+	 * @since 1.0.6
+	 * @return void
+	 */
+	protected function define( $name, $value ) {
+		if ( ! defined( $name ) ) {
+			define( $name, $value );
+		}
+	}
+
 	/**
 	 * Get plugin database version.
 	 *
@@ -733,14 +763,14 @@ abstract class Plugin implements PluginInterface {
 	 * @return void
 	 */
 	public function add_notice( $notice, $type = 'success' ) {
-		if ( empty( $notice ) && ! in_array( $type, [ 'success', 'info', 'warning', 'error' ], true ) ) {
+		if ( empty( $notice ) && ! in_array( $type, array( 'success', 'info', 'warning', 'error' ), true ) ) {
 			$type = 'success';
 		}
 
-		$this->data['notices'][] = [
+		$this->data['notices'][] = array(
 			'type'    => $type,
 			'message' => $notice,
-		];
+		);
 	}
 
 	/**
@@ -754,7 +784,7 @@ abstract class Plugin implements PluginInterface {
 	 * @since 1.0.0
 	 * @return void
 	 */
-	public function register_script( $handle, $src, $deps = [], $in_footer = false ) {
+	public function register_script( $handle, $src, $deps = array(), $in_footer = false ) {
 		// check if $src is relative or absolute.
 		if ( ! preg_match( '/^(http|https):\/\//', $src ) ) {
 			$url  = $this->get_assets_url() . ltrim( $src );
@@ -764,17 +794,17 @@ abstract class Plugin implements PluginInterface {
 			$path = str_replace( $this->get_dir_url(), $this->get_dir_path(), $src );
 		}
 		$php_file = str_replace( '.js', '.asset.php', $path );
-		$asset    = $php_file && file_exists( $php_file ) ? require $php_file : [
-			'dependencies' => [],
+		$asset    = $php_file && file_exists( $php_file ) ? require $php_file : array(
+			'dependencies' => array(),
 			'version'      => $this->get_version(),
-		];
+		);
 
 		$deps = array_merge( $asset['dependencies'], $deps );
 		$ver  = $asset['version'];
 
 		wp_register_script( $handle, $url, $deps, $ver, $in_footer );
 
-		if ( array_intersect( $deps, [ 'react', 'react-dom' ] ) ) {
+		if ( array_intersect( $deps, array( 'react', 'react-dom' ) ) ) {
 			// add text domain to the script.
 			$text_domain = $this->get_data( 'text_domain' );
 			$domain_path = $this->get_data( 'domain_path' );
@@ -793,7 +823,7 @@ abstract class Plugin implements PluginInterface {
 	 * @since 1.0.0
 	 * @return void
 	 */
-	public function register_style( $handle, $src, $deps = [], $media = 'all' ) {
+	public function register_style( $handle, $src, $deps = array(), $media = 'all' ) {
 		if ( ! preg_match( '/^(http|https):\/\//', $src ) ) {
 			$url  = $this->get_assets_url() . ltrim( $src );
 			$path = $this->get_assets_path() . ltrim( $src );
@@ -802,10 +832,10 @@ abstract class Plugin implements PluginInterface {
 			$path = str_replace( $this->get_dir_url(), $this->get_dir_url(), $src );
 		}
 		$php_file = str_replace( '.css', '.asset.php', $path );
-		$asset    = $php_file && file_exists( $php_file ) ? require $php_file : [
-			'dependencies' => [],
+		$asset    = $php_file && file_exists( $php_file ) ? require $php_file : array(
+			'dependencies' => array(),
 			'version'      => $this->get_version(),
-		];
+		);
 		$deps     = array_merge( $asset['dependencies'], $deps );
 		$ver      = $asset['version'];
 
@@ -823,7 +853,7 @@ abstract class Plugin implements PluginInterface {
 	 * @since 1.0.0
 	 * @return void
 	 */
-	public function enqueue_script( $handle, $src, $deps = [], $in_footer = false ) {
+	public function enqueue_script( $handle, $src, $deps = array(), $in_footer = false ) {
 		$this->register_script( $handle, $src, $deps, $in_footer );
 		wp_enqueue_script( $handle );
 	}
@@ -839,7 +869,7 @@ abstract class Plugin implements PluginInterface {
 	 * @since 1.0.0
 	 * @return void
 	 */
-	public function enqueue_style( $handle, $src, $deps = [], $media = 'all' ) {
+	public function enqueue_style( $handle, $src, $deps = array(), $media = 'all' ) {
 		$this->register_style( $handle, $src, $deps, $media );
 		wp_enqueue_style( $handle );
 	}
