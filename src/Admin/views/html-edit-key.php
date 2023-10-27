@@ -37,12 +37,12 @@ defined( 'ABSPATH' ) || exit;
 								<?php esc_html_e( 'Product', 'wc-serial-numbers' ); ?>
 								<abbr title="required"></abbr>
 							</label>
-							<select name="product_id" class="wc-product-search" data-allow_clear="true" display_stock="false" data-exclude_type="variable" data-placeholder="<?php esc_html_e( 'Select Product', 'wc-serial-numbers' ); ?>">
+							<select name="product_id" id="product_id" class="wcsn_search_product" required="required" placeholder="<?php esc_html_e( 'Select Product', 'wc-serial-numbers' ); ?>">
 								<?php
 								printf(
 									'<option value="%d" selected="selected">%s</option>',
 									esc_attr( $key->get_product_id() ),
-									$key->get_product_title
+									esc_html( $key->get_product_title() )
 								);
 								?>
 							</select>

@@ -33,23 +33,23 @@ msgstr ""
 msgid "Could not update item in the database."
 msgstr ""
 
-#: lib/Lib/Plugin.php:294
+#: lib/Lib/Plugin.php:309
 msgid "Go Pro"
 msgstr ""
 
-#: lib/Lib/Plugin.php:640 src/Admin/Settings.php:190
+#: lib/Lib/Plugin.php:655 src/Admin/Settings.php:190
 msgid "Documentation"
 msgstr ""
 
-#: lib/Lib/Plugin.php:647
+#: lib/Lib/Plugin.php:662
 msgid "Support"
 msgstr ""
 
-#: lib/Lib/Plugin.php:654
+#: lib/Lib/Plugin.php:669
 msgid "Review"
 msgstr ""
 
-#: lib/Lib/Plugin.php:660
+#: lib/Lib/Plugin.php:675
 msgid "More Plugins"
 msgstr ""
 
@@ -57,7 +57,7 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: lib/Lib/Settings.php:84
+#: lib/Lib/Settings.php:96
 msgid "Settings saved."
 msgstr ""
 
@@ -674,7 +674,7 @@ msgid "General Settings"
 msgstr ""
 
 #: src/Admin/Settings.php:48
-msgid "These options determine the behavior and operation of the serial keys."
+msgid "These options determine the behavior and operation of the plugin."
 msgstr ""
 
 #: src/Admin/Settings.php:52
@@ -686,39 +686,39 @@ msgid "Automatically completes orders after successful payments."
 msgstr ""
 
 #: src/Admin/Settings.php:59
-msgid "Reuse serial keys"
+msgid "Reuse keys"
 msgstr ""
 
 #: src/Admin/Settings.php:61
-msgid "Recover failed, refunded serial keys for selling again."
+msgid "Recover failed, refunded keys for selling again."
 msgstr ""
 
 #: src/Admin/Settings.php:62
 msgid ""
-"If you enable this option, the serial keys will be available for selling "
-"again if the order is refunded or failed."
+"If you enable this option, the keys will be available for selling again if "
+"the order is refunded or failed."
 msgstr ""
 
 #: src/Admin/Settings.php:68
-msgid "Revoke serial keys"
+msgid "Revoke keys"
 msgstr ""
 
 #: src/Admin/Settings.php:70
-msgid "Revoke serial keys when the order status changes to cancelled or refunded."
+msgid "Revoke keys when the order status changes to cancelled or refunded."
 msgstr ""
 
 #: src/Admin/Settings.php:71
 msgid ""
-"If you enable this option, the serial keys will be revoked when the order "
-"status changes to cancelled or refunded."
+"If you enable this option, the keys will be revoked when the order status "
+"changes to cancelled or refunded."
 msgstr ""
 
 #: src/Admin/Settings.php:76
-msgid "Hide serial keys"
+msgid "Hide keys"
 msgstr ""
 
 #: src/Admin/Settings.php:78
-msgid "Serial keys will be masked in the list table."
+msgid "Keys will be masked in the list table."
 msgstr ""
 
 #: src/Admin/Settings.php:83
@@ -740,7 +740,7 @@ msgid "Stock Notification"
 msgstr ""
 
 #: src/Admin/Settings.php:97
-msgid "These options determine the operation of the serial key stock notification."
+msgid "These options determine the operation of the key's stock notification."
 msgstr ""
 
 #: src/Admin/Settings.php:101
@@ -748,7 +748,7 @@ msgid "Stock notification email"
 msgstr ""
 
 #: src/Admin/Settings.php:103
-msgid "Sends notification emails when product stock is low."
+msgid "Sends notification emails when key stock is low."
 msgstr ""
 
 #: src/Admin/Settings.php:109
@@ -757,8 +757,8 @@ msgstr ""
 
 #: src/Admin/Settings.php:111
 msgid ""
-"An email notification will be sent when the stock falls below the specified "
-"number."
+"An email notification will be sent when the key stock falls below the "
+"specified number."
 msgstr ""
 
 #: src/Admin/Settings.php:116
@@ -769,38 +769,36 @@ msgstr ""
 msgid "The email address which will be used to send email notifications."
 msgstr ""
 
-#: src/Admin/Settings.php:152 src/Admin/views/html-add-key.php:170
-msgid "Create and assign license keys for WooCommerce variable products."
+#: src/Admin/Settings.php:152
+msgid "Create and assign keys for WooCommerce variable products."
 msgstr ""
 
-#: src/Admin/Settings.php:153 src/Admin/views/html-add-key.php:171
-msgid "Generate bulk license keys with your custom key generator rule."
+#: src/Admin/Settings.php:153
+msgid "Generate bulk keys with your custom key generator rule."
 msgstr ""
 
 #: src/Admin/Settings.php:154 src/Admin/views/html-add-key.php:172
 msgid "Random & sequential key order for the generator rules."
 msgstr ""
 
-#: src/Admin/Settings.php:155 src/Admin/views/html-add-key.php:173
-msgid "Automatic license key generator to auto-create & assign keys with orders."
+#: src/Admin/Settings.php:155
+msgid "Automatic key generator to auto-create & assign keys with orders."
 msgstr ""
 
 #: src/Admin/Settings.php:156 src/Admin/views/html-add-key.php:174
 msgid "License key management option from the order page with required actions."
 msgstr ""
 
-#: src/Admin/Settings.php:157 src/Admin/views/html-add-key.php:175
-msgid "Support for bulk import/export of license keys from/to CSV."
+#: src/Admin/Settings.php:157
+msgid "Support for bulk import/export of keys from/to CSV."
 msgstr ""
 
-#: src/Admin/Settings.php:158 src/Admin/views/html-add-key.php:176
-msgid "Send Serial Keys via SMS with Twilio."
+#: src/Admin/Settings.php:158
+msgid "Send keys via SMS with Twilio."
 msgstr ""
 
-#: src/Admin/Settings.php:159 src/Admin/views/html-add-key.php:177
-msgid ""
-"Option to sell license keys even if there are no available keys in the "
-"stock."
+#: src/Admin/Settings.php:159
+msgid "Option to sell keys even if there are no available keys in the stock."
 msgstr ""
 
 #: src/Admin/Settings.php:160 src/Admin/views/html-add-key.php:178
@@ -813,9 +811,9 @@ msgid ""
 "automatic."
 msgstr ""
 
-#: src/Admin/Settings.php:162 src/Admin/views/html-add-key.php:180
+#: src/Admin/Settings.php:162
 msgid ""
-"Email Template to easily and quickly customize the order confirmation & low "
+"Email template to easily and quickly customize the order confirmation & low "
 "stock alert email."
 msgstr ""
 
@@ -946,6 +944,38 @@ msgstr ""
 
 #: src/Admin/views/html-add-key.php:158
 msgid "Add Key"
+msgstr ""
+
+#: src/Admin/views/html-add-key.php:170
+msgid "Create and assign license keys for WooCommerce variable products."
+msgstr ""
+
+#: src/Admin/views/html-add-key.php:171
+msgid "Generate bulk license keys with your custom key generator rule."
+msgstr ""
+
+#: src/Admin/views/html-add-key.php:173
+msgid "Automatic license key generator to auto-create & assign keys with orders."
+msgstr ""
+
+#: src/Admin/views/html-add-key.php:175
+msgid "Support for bulk import/export of license keys from/to CSV."
+msgstr ""
+
+#: src/Admin/views/html-add-key.php:176
+msgid "Send Serial Keys via SMS with Twilio."
+msgstr ""
+
+#: src/Admin/views/html-add-key.php:177
+msgid ""
+"Option to sell license keys even if there are no available keys in the "
+"stock."
+msgstr ""
+
+#: src/Admin/views/html-add-key.php:180
+msgid ""
+"Email Template to easily and quickly customize the order confirmation & low "
+"stock alert email."
 msgstr ""
 
 #: src/Admin/views/html-api-actions.php:21
@@ -1486,7 +1516,7 @@ msgid ""
 msgstr ""
 
 #. Plugin Name of the plugin/theme
-msgid "Serial Numbers for WooCommerce"
+msgid "WC Serial Numbers"
 msgstr ""
 
 #. Plugin URI of the plugin/theme
