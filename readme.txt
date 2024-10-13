@@ -1,10 +1,10 @@
-=== WC Serial Numbers - Ultimate License Manager Plugin for Selling, Licensing & Securely Delivering Digital Products with WooCommerce ===
-Contributors: pluginever, manikmist09, b-07
-Tags: license manager, license, license number, serial number, activation number, key, serial key, license key, activation key, product key, serial code, license code, activation code, digital, digital downloads, digital product key, digital license, product license, software license, software license key, software activation, license key for digital products, digital product license, virtual product key, virtual product license, subscription product license, license key generator, woocommerce, woocommerce license manager, woocommerce key, sell code
+=== WC Serial Numbers - Ultimate License Manager for Selling, Licensing & Securely Delivering Digital Content with WooCommerce ===
+Contributors: pluginever, manikmist09
+Tags: license, license manager, serial number, serial key, woocommerce
 Requires at least: 5.0
-Tested up to: 6.3
-Requires PHP: 5.6
-Stable tag: 1.6.5
+Tested up to: 6.6
+Requires PHP: 7.4
+Stable tag: 2.0.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ The easiest way to sell digital products and manage licenses with WooCommerce.
 
 == Description ==
 
-= Ultimate Solution for Selling Digital Files & Content with WooCommerce =
+= Ultimate Solution for Selling Digital Products and Content with WooCommerce =
 **[WC Serial Numbers](https://pluginever.com/plugins/woocommerce-serial-numbers-pro/?utm_source=product-page-wordpress.org&utm_medium=product-page-wordpress.org&utm_campaign=product-page-wordpress.org)** is the most powerful WordPress license manager plugin created for WooCommerce store owners. Sell keys, manage licenses, assign serial keys to products, and keep track of customer activations, all without leaving the WooCommerce dashboard.
 
 WooCommerce is the best eCommerce platform out there, but lacks key features for selling digital products. WC Serial Numbers plugin bridges this gap by seamlessly integrating all the necessary functionalities. Transform your WooCommerce store into a complete digital marketplace by incorporating license management, secured and authorized distribution.
@@ -162,7 +162,7 @@ Visit [PluginEver](https://pluginever.com) to learn from our WooCommerce tutoria
 
 * WordPress 5.0 or greater
 * WooCommerce 5.0 or greater
-* PHP version 5.6 or greater
+* PHP version 7.4 or greater
 * MySQL version 5.6 or greater
 * MariaDB version 10 or later
 
@@ -250,8 +250,69 @@ Yes, you are always welcome to [provide suggestions](https://github.com/pluginev
 8. Order Complete Email with Keys
 9. Thank You Page with Keys
 
-
 == Changelog ==
+= 2.0.6 (07 Oct 2024) =
+* Enhance: Update the Key Model to enable more precise key queries, enhancing performance and accuracy.
+
+= 2.0.3 (12 Sep 2024) =
+* Fix: Security issue.
+
+= 2.0.2 (01 Sep 2024) =
+* Fix: Few known issues.
+
+= 2.0.1 (14 Aug 2024) =
+* Enhance: Migrate classes to new directory structure
+* Fix: Few known issues.
+
+= 2.0.0 (12 Aug 2024) =
+* New: Added new directory structure.
+* Fix: Few known issues.
+
+= 1.7.7 (31 Jul 2024) =
+Enhance: Enhance optimized code for better autoload classes.
+
+= 1.7.6 (30 Jul 2024) =
+Enhance: Enhanced security to handle form actions.
+Enhance: Enhanced security to handle Ajax search.
+Enhance: Enhanced security to handle the GET & POST supper global variables.
+Fix: Vulnerability security issue.
+Fix: Few other known issues.
+
+= 1.7.5 (01 Jul 2024) =
+Enhance: Enhanced security to handle form actions.
+Enhance: Enhanced security to handle Ajax search.
+Fix: Few known issues fixed.
+
+= 1.7.4 (11 Jun 2024) =
+Fix: Vulnerability issue.
+Fix: Shortcode permission issue.
+
+= 1.7.3 (12 May 2024) =
+Enhance: Move query arg based API to REST API
+Fix: Few known issues fixed.
+
+= 1.7.2 (19 Apr 2024) =
+* Fix: Text domain issue fixed.
+
+= 1.7.1 (15 Mar 2024) =
+* Fix: Few known issues fixed.
+
+= 1.7.0 (7 Mar 2024) =
+* Fix: Few known issues fixed.
+
+= 1.6.9 (28 Feb 2024) =
+* Fix: The keys column is missing on the order table.
+* Fix: Add serial keys, Remove serial keys actions missing on the order table.
+
+= 1.6.8 (18 Feb 2024) =
+* Fix: Compatibility with WooCommerce 8.6
+
+= 1.6.7 (23 Jan 2024) =
+* Fix: Compatibility with WooCommerce 8.5
+
+= 1.6.6 (13 Nov 2023) =
+* Fix: Compatibility with WordPress 6.4
+
 = 1.6.5 (25 Oct 2023) =
 * Fix: API request is not working.
 

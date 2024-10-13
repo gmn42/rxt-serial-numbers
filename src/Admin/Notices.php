@@ -112,6 +112,12 @@ class Notices {
 	 */
 	public function dismiss_notice() {
 		check_ajax_referer( 'wc_serial_numbers_dismiss_notice', 'nonce' );
+
+		// Must have manage woocommerce user capability role to access this endpoint.
+		if ( ! current_user_can( 'manage_woocommerce' ) ) { // phpcs:ignore WordPress.WP.Capabilities.Unknown
+			wp_die();
+		}
+
 		$notice_id = isset( $_POST['notice_id'] ) ? sanitize_text_field( wp_unslash( $_POST['notice_id'] ) ) : '';
 		if ( $notice_id ) {
 			update_option( 'wc_serial_numbers_dismissed_notices', array_merge( get_option( 'wc_serial_numbers_dismissed_notices', array() ), array( $notice_id ) ) );

@@ -102,6 +102,7 @@ class KeysTable extends ListTable {
 		$order_id              = filter_input( INPUT_GET, 'order_id', FILTER_SANITIZE_NUMBER_INT );
 		$customer_id           = filter_input( INPUT_GET, 'customer_id', FILTER_SANITIZE_NUMBER_INT );
 		$id                    = filter_input( INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT );
+
 		if ( ! empty( $status ) && ! array_key_exists( $status, wcsn_get_key_statuses() ) ) {
 			$status = 'available';
 		}
@@ -209,7 +210,8 @@ class KeysTable extends ListTable {
 	 * @return array $views All the views sellable
 	 */
 	public function get_views() {
-		$current         = isset( $_GET['status'] ) ? sanitize_key( wp_unslash( $_GET['status'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		wp_verify_nonce( '_nonce' );
+		$current         = isset( $_GET['status'] ) ? sanitize_key( wp_unslash( $_GET['status'] ) ) : '';
 		$available_count = '&nbsp;<span class="count">(' . $this->available_count . ')</span>';
 		$pending_count   = '&nbsp;<span class="count">(' . $this->pending_count . ')</span>';
 		$sold_count      = '&nbsp;<span class="count">(' . $this->sold_count . ')</span>';
@@ -290,10 +292,9 @@ class KeysTable extends ListTable {
 	 * @since 1.4.6
 	 */
 	public function process_bulk_actions( $doaction ) {
-		if ( $doaction && check_ajax_referer( 'bulk-' . $this->_args['plural'] ) ) {
+		if ( $doaction && check_ajax_referer( 'bulk-' . $this->_args['plural'] ) && current_user_can( 'manage_woocommerce' ) ) { // phpcs:ignore WordPress.WP.Capabilities.Unknown
 			if ( wp_unslash( isset( $_REQUEST['id'] ) ) ) {
-				$ids      = wp_parse_id_list( wp_unslash( $_REQUEST['id'] ) );
-				$doaction = ( - 1 !== $_REQUEST['action'] ) ? $_REQUEST['action'] : $_REQUEST['action2']; // phpcs:ignore
+				$ids = wp_parse_id_list( wp_unslash( $_REQUEST['id'] ) );
 			} elseif ( isset( $_REQUEST['ids'] ) ) {
 				$ids = array_map( 'absint', $_REQUEST['ids'] );
 			} elseif ( wp_get_referer() ) {

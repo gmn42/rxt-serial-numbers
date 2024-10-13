@@ -44,7 +44,9 @@ class Menus {
 	 * @since 1.4.6
 	 */
 	public function setup_screen() {
-		if ( isset( $_GET['edit'] ) || isset( $_GET['delete'] ) || isset( $_GET['add'] ) || isset( $_GET['generate'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		wp_verify_nonce( '_nonce' );
+
+		if ( isset( $_GET['edit'] ) || isset( $_GET['delete'] ) || isset( $_GET['add'] ) || isset( $_GET['generate'] ) ) {
 			return;
 		}
 
@@ -82,11 +84,10 @@ class Menus {
 	 * @return void
 	 */
 	public function main_menu() {
-		$role = wcsn_get_manager_role();
 		add_menu_page(
 			__( 'Serial Numbers', 'wc-serial-numbers' ),
 			__( 'Serial Numbers', 'wc-serial-numbers' ),
-			$role,
+			'manage_woocommerce', // phpcs:ignore WordPress.WP.Capabilities.Unknown
 			'wc-serial-numbers',
 			null,
 			'dashicons-lock',
@@ -97,7 +98,7 @@ class Menus {
 			'wc-serial-numbers',
 			__( 'Serial Keys', 'wc-serial-numbers' ),
 			__( 'Serial Keys', 'wc-serial-numbers' ),
-			$role,
+			'manage_woocommerce', // phpcs:ignore WordPress.WP.Capabilities.Unknown
 			'wc-serial-numbers',
 			array( $this, 'output_main_page' )
 		);
@@ -117,7 +118,7 @@ class Menus {
 			'wc-serial-numbers',
 			__( 'Activations', 'wc-serial-numbers' ),
 			__( 'Activations', 'wc-serial-numbers' ),
-			wcsn_get_manager_role(),
+			'manage_woocommerce', // phpcs:ignore WordPress.WP.Capabilities.Unknown
 			'wc-serial-numbers-activations',
 			array( $this, 'output_activations_page' )
 		);
@@ -134,7 +135,7 @@ class Menus {
 			'wc-serial-numbers',
 			__( 'Tools', 'wc-serial-numbers' ),
 			__( 'Tools', 'wc-serial-numbers' ),
-			wcsn_get_manager_role(),
+			'manage_woocommerce', // phpcs:ignore WordPress.WP.Capabilities.Unknown
 			'wc-serial-numbers-tools',
 			array( $this, 'output_tools_page' )
 		);
@@ -151,7 +152,7 @@ class Menus {
 			'wc-serial-numbers',
 			__( 'Reports', 'wc-serial-numbers' ),
 			__( 'Reports', 'wc-serial-numbers' ),
-			wcsn_get_manager_role(),
+			'manage_woocommerce', // phpcs:ignore WordPress.WP.Capabilities.Unknown
 			'wc-serial-numbers-reports',
 			array( $this, 'output_reports_page' )
 		);
@@ -168,7 +169,7 @@ class Menus {
 			'wc-serial-numbers',
 			__( 'Settings', 'wc-serial-numbers' ),
 			__( 'Settings', 'wc-serial-numbers' ),
-			wcsn_get_manager_role(),
+			'manage_woocommerce', // phpcs:ignore WordPress.WP.Capabilities.Unknown
 			'wc-serial-numbers-settings',
 			array( Settings::class, 'output' )
 		);
@@ -181,13 +182,12 @@ class Menus {
 	 * @return void
 	 */
 	public function promo_menu() {
-		$role = wcsn_get_manager_role();
 		if ( ! WCSN()->is_premium_active() ) {
 			add_submenu_page(
 				'wc-serial-numbers',
 				'',
 				'<span style="color:#05ef82;"><span class="dashicons dashicons-star-filled" style="font-size: 17px"></span> ' . __( 'Upgrade to Pro', 'wc-serial-numbers' ) . '</span>',
-				$role,
+				'manage_woocommerce', // phpcs:ignore WordPress.WP.Capabilities.Unknown
 				'go_wcsn_pro',
 				array( $this, 'go_pro_redirect' )
 			);
@@ -201,8 +201,9 @@ class Menus {
 	 * @return void
 	 */
 	public function output_main_page() {
-		$add  = isset( $_GET['add'] ) ? true : false;  // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$edit = isset( $_GET['edit'] ) ? absint( $_GET['edit'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		wp_verify_nonce( '_nonce' );
+		$add  = isset( $_GET['add'] ) ? true : false;
+		$edit = isset( $_GET['edit'] ) ? absint( $_GET['edit'] ) : 0;
 		if ( $edit ) {
 			$key = new Key( $edit );
 			if ( ! $key->exists() ) {
@@ -239,6 +240,7 @@ class Menus {
 	 * @return void
 	 */
 	public function output_tools_page() {
+		wp_verify_nonce( '_nonce' );
 		$tabs = array(
 			'generators' => __( 'Generators', 'wc-serial-numbers' ),
 			'api'        => __( 'API Toolkit', 'wc-serial-numbers' ),
@@ -253,8 +255,8 @@ class Menus {
 
 		$tabs        = apply_filters( 'wc_serial_numbers_tools_tabs', $tabs );
 		$tab_ids     = array_keys( $tabs );
-		$current_tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : reset( $tab_ids ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$page        = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$current_tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : reset( $tab_ids );
+		$page        = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
 
 		Admin::view(
 			'html-tools.php',
@@ -273,14 +275,15 @@ class Menus {
 	 * @return void
 	 */
 	public function output_reports_page() {
+		wp_verify_nonce( '_nonce' );
 		$tabs = array(
 			'stock' => __( 'Stock', 'wc-serial-numbers' ),
 		);
 
 		$tabs        = apply_filters( 'wc_serial_numbers_reports_tabs', $tabs );
 		$tab_ids     = array_keys( $tabs );
-		$current_tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : reset( $tab_ids ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$page        = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$current_tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : reset( $tab_ids );
+		$page        = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
 
 		Admin::view(
 			'html-reports.php',
@@ -299,9 +302,10 @@ class Menus {
 	 * @return void
 	 */
 	public function go_pro_redirect() {
-		if ( isset( $_GET['page'] ) && 'go_wcsn_pro' === $_GET['page'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			wp_redirect( 'https://pluginever.com/plugins/woocommerce-serial-numbers-pro/?utm_source=admin-menu&utm_medium=link&utm_campaign=upgrade&utm_id=wc-serial-numbers' ); // phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect
-			die;
+		wp_verify_nonce( '_nonce' );
+		if ( isset( $_GET['page'] ) && 'go_wcsn_pro' === $_GET['page'] ) {
+			wp_safe_redirect( 'https://pluginever.com/plugins/woocommerce-serial-numbers-pro/?utm_source=admin-menu&utm_medium=link&utm_campaign=upgrade&utm_id=wc-serial-numbers' );
+			exit;
 		}
 	}
 
@@ -331,7 +335,7 @@ class Menus {
 				<h3><?php esc_html_e( 'Available in Pro Version', 'wc-serial-numbers' ); ?></h3>
 				<a href="https://pluginever.com/plugins/woocommerce-serial-numbers-pro/?utm_source=import-tab&utm_medium=link&utm_campaign=upgrade&utm_id=wc-serial-numbers" target="_blank" class="button-primary"><?php esc_html_e( 'Upgrade to Pro Now', 'wc-serial-numbers' ); ?></a>
 			</div>
-			<img src="<?php echo esc_url( WCSN()->get_dir_url() . 'assets/images/csv-import.png' ); ?>" alt="<?php esc_attr_e( 'Import Serial Numbers', 'wc-serial-numbers' ); ?>"/>
+			<img src="<?php echo esc_url( WCSN()->get_assets_url() . 'images/csv-import.png' ); ?>" alt="<?php esc_attr_e( 'Import Serial Numbers', 'wc-serial-numbers' ); ?>"/>
 		</div>
 		<div class="wcsn-feature-promo-banner">
 			<div class="wcsn-feature-promo-banner__content">
