@@ -2,7 +2,7 @@
 /**
  * Plugin Name: RXT Serial Numbers
  * Plugin URI:  https://www.pluginever.com/plugins/wocommerce-serial-numbers-pro/
- * Description: Sell and manage license keys/ serial numbers/ secret keys easily within your WooCommerce store.
+ * Description: Modified WC Serial Numbers for RXT
  * Version: 1.6.5
  * Author:      PluginEver
  * Author URI:  http://pluginever.com
