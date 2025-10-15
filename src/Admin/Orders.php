@@ -81,7 +81,7 @@ class Orders {
 	 */
 	public static function add_order_serial_column( $columns ) {
 		$postition = 3;
-		$new       = array_slice( $columns, 0, $postition, true ) + array( 'order_serials' => '<span class="dashicons dashicons-lock"></span>' ) + array_slice( $columns, $postition, count( $columns ) - $postition, true );
+		$new       = array_slice( $columns, 0, $postition, true ) + array( 'order_serials' => '<span class="dashicons dashicons-palmtree"></span>' ) + array_slice( $columns, $postition, count( $columns ) - $postition, true );
 
 		return $new;
 	}
@@ -108,7 +108,7 @@ class Orders {
 					$title = __( 'Order is not fullfilled.', 'wc-serial-numbers' );
 				}
 				$url = add_query_arg( array( 'order_id' => $order_id ), admin_url( 'admin.php?page=wc-serial-numbers' ) );
-				printf( '<a href="%s" title="%s"><span class="dashicons dashicons-lock" style="%s"></span></a>', esc_url( $url ), esc_html( $title ), esc_attr( $style ) );
+				printf( '<a href="%s" title="%s"><span class="dashicons dashicons-palmtree" style="%s"></span></a>', esc_url( $url ), esc_html( $title ), esc_attr( $style ) );
 			}
 		}
 	}
