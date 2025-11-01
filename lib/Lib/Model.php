@@ -1278,7 +1278,7 @@ abstract class Model {
 				$query_where[] = array(
 					'column'  => "{$this->table_name}.{$column}",
 					'value'   => $args[ $column . '__starts_with' ],
-					'compare' => 'LIKE',
+					'compare' => 'STARTS WITH',
 				);
 			} elseif ( ! empty( $args[ $column . '__ends_with' ] ) ) {
 				// __ends_with clause.
